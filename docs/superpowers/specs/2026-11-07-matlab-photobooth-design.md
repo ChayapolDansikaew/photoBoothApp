@@ -66,12 +66,21 @@ Mineaorz/
 ├── +imgproc/
 │   ├── autoCorrect.m
 │   ├── skinMask.m            # คืนมาสก์ผิวแบบขอบนุ่ม [0,1]
-│   ├── skinSmooth.m
+│   ├── prepareSmoothing.m    # มาสก์ + เลเยอร์ bilateral (ช้า ทำครั้งเดียวต่อรูป)
+│   ├── blendSmoothing.m      # ผสมตามค่าสไลด์ (เร็ว)
+│   ├── skinSmooth.m          # prepare + blend รวดเดียว
 │   ├── applyTone.m           # applyTone(img, name, 'preview'|'final')
 │   ├── toneNames.m
+│   ├── restoreClass.m
 │   └── debugSkinPipeline.m   # รูปแสดงแต่ละขั้น ไว้ใส่รายงาน
 ├── +booth/
-│   ├── FrameLibrary.m
+│   ├── loadFrames.m          # อ่าน frames/*.png + .json (เดิมใน spec เรียก FrameLibrary)
+│   ├── detectSlots.m         # หาช่องใส 4 ช่องแล้วเรียงลำดับ
+│   ├── defaultFrame.m
+│   ├── preparePhoto.m        # รูปดิบ → ย่อ/mirror/autoCorrect/prepareSmoothing
+│   ├── renderPhoto.m         # blend + tone
+│   ├── loadConfig.m
+│   ├── cropToAspect.m
 │   ├── composeStrip.m
 │   ├── makeGif.m
 │   ├── SessionStore.m
@@ -153,9 +162,10 @@ Mineaorz/
 
 ### 4.3 `skinSmooth(img, amount)` (amount 0–100)
 - a = amount/100 ถ้า a = 0 คืนรูปเดิมทันที
-- ทำงานบนรูป double ช่วง [0,1]: `smooth = imbilatfilt(img, DoS, sigmaSpatial)`
-  - DoS = 0.002 + 0.02a
-  - sigmaSpatial = (2 + 6a) × (ด้านยาวของรูป / 1000) ทำให้ผลเท่ากันทั้งตอน review ที่ 800px และตอนเซฟที่ 2400px
+- แยกเป็น 2 ขั้นเพื่อให้ลากสไลด์แล้วเห็นผลทันที:
+  - **`prepareSmoothing`** ทำครั้งเดียวต่อรูป: หามาสก์ M แล้วทำเลเยอร์ smooth ด้วย `imbilatfilt(img, 0.022, sigmaS)` บนรูปย่อที่ด้านยาวไม่เกิน 800px (sigmaS = 8 px ต่อ 1000 px) ถ้าย่อมาก็ขยายกลับ
+  - **`blendSmoothing`** ทำทุกครั้งที่ขยับสไลด์: แค่ผสมรูปตามสูตรด้านล่าง
+- ความแรงของ bilateral คงที่ สไลด์คุมแค่น้ำหนัก a
 - คืนรายละเอียดผิว: `detail = img − imgaussfilt(img, 1)` แล้วใช้ `smooth = smooth + 0.3·detail`
 - ผสมรูป: `out = img·(1 − a·M) + smooth·(a·M)`
 - `debugSkinPipeline` แสดง 6 ช่อง: ต้นฉบับ → มาสก์ YCbCr → หลังทำ morphology → edge map → มาสก์สุดท้าย → ผลลัพธ์
