@@ -1,4 +1,6 @@
-output/
 logs/
+output/
 __pycache__/
+*.pyc
 *.asv
+*.mex*

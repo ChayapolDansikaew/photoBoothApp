@@ -1,0 +1,16 @@
+{
+  "camera": "webcam",
+  "bridgePort": 5555,
+  "webcamIndex": 0,
+  "webcamResolution": [1280, 720],
+  "pythonExe": "",
+  "countdownSeconds": 3,
+  "gapSeconds": 3,
+  "mirror": true,
+  "idleTimeoutSeconds": 60,
+  "workingLongSide": 2400,
+  "reviewLongSide": 800,
+  "gifDelaySeconds": 0.6,
+  "defaultSmoothness": 40,
+  "outputDir": "output"
+}

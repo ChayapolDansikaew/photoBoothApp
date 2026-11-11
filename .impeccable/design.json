@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-08T17:04:00+07:00",
+  "title": "Design System: Mineaorz Photobooth Studio",
+  "extensions": {
+    "colorMeta": {
+      "terracotta-primary": {
+        "role": "primary",
+        "displayName": "Burnt Terracotta",
+        "canonical": "#c85a3b",
+        "tonalRamp": ["#3d160b", "#5c2313", "#7d311c", "#a8462a", "#c85a3b", "#da7b60", "#eba894", "#f7dcd4"]
+      },
+      "terracotta-deep": {
+        "role": "primary",
+        "displayName": "Deep Terracotta",
+        "canonical": "#a8462a",
+        "tonalRamp": ["#331208", "#4f1d0f", "#6e2a17", "#8c3820", "#a8462a", "#c4684e", "#dfa08e", "#f3d7cf"]
+      },
+      "sage-secondary": {
+        "role": "secondary",
+        "displayName": "Studio Sage",
+        "canonical": "#5b7a62",
+        "tonalRamp": ["#1b261e", "#2b3b2f", "#3b5241", "#4b6651", "#5b7a62", "#7c9982", "#a5baa9", "#d6e2d8"]
+      },
+      "warm-ivory": {
+        "role": "neutral",
+        "displayName": "Warm Ivory",
+        "canonical": "#f7f3ec",
+        "tonalRamp": ["#231f1d", "#453e3a", "#6e655f", "#9c9188", "#c4b9ae", "#dcd2c3", "#ede6db", "#f7f3ec"]
+      },
+      "soft-linen": {
+        "role": "neutral",
+        "displayName": "Soft Linen",
+        "canonical": "#ede6db",
+        "tonalRamp": ["#231f1d", "#453e3a", "#6e655f", "#9c9188", "#c4b9ae", "#dcd2c3", "#ede6db", "#f7f3ec"]
+      },
+      "espresso-ink": {
+        "role": "neutral",
+        "displayName": "Espresso Ink",
+        "canonical": "#231f1d",
+        "tonalRamp": ["#141110", "#231f1d", "#3b3532", "#574f4b", "#756b66", "#998e88", "#c2b9b4", "#ebe6e4"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display & Kiosk Hero",
+        "purpose": "Idle screen studio title (42px) and 2-meter shooting countdown numbers (96px)."
+      },
+      "headline": {
+        "displayName": "Step Headline",
+        "purpose": "Top-left screen step titles across all kiosk views (28px bold)."
+      },
+      "title": {
+        "displayName": "Primary CTA & Live Status",
+        "purpose": "Primary action buttons and shooting progress indicators (22px-26px bold)."
+      },
+      "body": {
+        "displayName": "Control & Secondary UI",
+        "purpose": "Smoothness slider labels, secondary navigation buttons, and subtitles (18px)."
+      },
+      "label": {
+        "displayName": "Metadata & Frame Info",
+        "purpose": "Frame tone badges, saved session paths, and 2x2 grid sub-actions (15px-16px)."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "slide-interval",
+        "value": "4000ms",
+        "purpose": "Idle screen recent photo strip slideshow rotation."
+      },
+      {
+        "name": "preview-loop",
+        "value": "80ms",
+        "purpose": "Real-time toned camera preview refresh interval (~12.5 fps)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "kiosk-standard",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Kiosk CTA Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "High-contrast Burnt Terracotta button for the single primary forward action on each kiosk screen.",
+      "html": "<button class=\"ds-btn-primary\">แตะเพื่อเริ่มถ่าย (START)</button>",
+      "css": ".ds-btn-primary { background: #c85a3b; color: #ffffff; padding: 18px 36px; font-family: 'Segoe UI', sans-serif; font-size: 22px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s ease; } .ds-btn-primary:hover { background: #a8462a; } .ds-btn-primary:focus-visible { outline: 3px solid #231f1d; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Linen Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Warm Soft Linen button with Espresso Ink text for secondary navigation, frame selection, and Before/After toggle.",
+      "html": "<button class=\"ds-btn-secondary\">สลับดู ก่อน/หลัง</button>",
+      "css": ".ds-btn-secondary { background: #ede6db; color: #231f1d; padding: 12px 24px; font-family: 'Segoe UI', sans-serif; font-size: 18px; font-weight: 600; border: 1px solid #dcd2c3; border-radius: 6px; cursor: pointer; transition: background 0.15s ease; } .ds-btn-secondary:hover { background: #dcd2c3; } .ds-btn-secondary:focus-visible { outline: 2px solid #c85a3b; outline-offset: 2px; }"
+    },
+    {
+      "name": "Retake Slot Button",
+      "kind": "button",
+      "refersTo": "button-primary-hover",
+      "description": "Compact Deep Terracotta button beneath each 2x2 review thumbnail to trigger a single-shot retake.",
+      "html": "<button class=\"ds-btn-retake\">ถ่ายซ้ำ</button>",
+      "css": ".ds-btn-retake { background: #a8462a; color: #ffffff; padding: 8px 18px; font-family: 'Segoe UI', sans-serif; font-size: 15px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; } .ds-btn-retake:hover { background: #8c3820; }"
+    },
+    {
+      "name": "Studio Kiosk Card / Viewport Frame",
+      "kind": "card",
+      "refersTo": "card-surface",
+      "description": "Soft Linen container framing photo previews and control groups against the Warm Ivory background.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">3. ตรวจสอบรูป & ปรับความเนียนผิว</div><div class=\"ds-card-meta\">กรอบ: Classic Strip | โทน: warmFilm</div></div>",
+      "css": ".ds-card { background: #ede6db; color: #231f1d; padding: 24px; border-radius: 8px; border: 1px solid #dcd2c3; font-family: 'Segoe UI', sans-serif; } .ds-card-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; } .ds-card-meta { font-size: 16px; color: #c85a3b; font-weight: 600; }"
+    },
+    {
+      "name": "Hardware / Save Alert Banner",
+      "kind": "custom",
+      "refersTo": "banner-alert",
+      "description": "Top full-width banner for camera disconnect or save failure recovery with instant Retry and Mock fallback buttons.",
+      "html": "<div class=\"ds-banner\"><span>กล้องไม่พร้อม — กรุณาเช็คสาย USB หรือเลือกโหมดสำรอง</span><button class=\"ds-banner-btn\">ใช้โหมดสำรอง (Mock)</button></div>",
+      "css": ".ds-banner { display: flex; align-items: center; justify-content: space-between; background: #9e3328; color: #ffffff; padding: 10px 20px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 15px; font-weight: 700; } .ds-banner-btn { background: #ede6db; color: #231f1d; border: none; padding: 6px 14px; border-radius: 4px; font-weight: 600; cursor: pointer; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Seoul Self-Studio Sanctuary",
+    "overview": "Mineaorz Photobooth Studio เปลี่ยนหน้าต่างโปรแกรมคำนวณ MATLAB uifigure ให้เป็นตู้ถ่ายรูปอัตโนมัติสไตล์สตูดิโอเกาหลีสมัยใหม่ (Modern Korean Self-Photo Studio) ที่อบอุ่น สะอาดตา และเป็นมิตรต่อผู้มาเดินงานนิทรรศการ มู้ดแอนด์โทนได้รับแรงบันดาลใจจากกระดาษอาร์ตเนื้อด้านสีงาช้าง (Warm Ivory) ผ้าลินินสีเบจ (Soft Linen) และหมึกสีน้ำตาลเอสเปรสโซเข้ม (Espresso Ink) ที่ให้ความรู้สึกเหมือนแกลเลอรีภาพถ่ายขนาดย่อมมากกว่าหน้าจอซอฟต์แวร์วิศวกรรม\n\nหัวใจสำคัญของระบบดีไซน์นี้คือการทำหน้าที่เป็น 'กรอบกระดาษอาร์ตที่ไม่แย่งซีนภาพถ่าย' พื้นหลังสีครีมอ่อนที่มีค่าความอิ่มตัวต่ำจะช่วยให้สายตาของผู้ใช้และอาจารย์ผู้ตรวจประเมินสีผิวจริง ความสว่าง (Auto Light) และความคมชัดของภาพ Before/After ได้อย่างแม่นยำ ในขณะเดียวกัน ปุ่มสั่งงานหลักและตัวเลขนับถอยหลังใช้สีส้มอิฐอบอุ่น (Burnt Terracotta) ที่มีคอนทราสต์สูงเพื่อให้มองเห็นและกดใช้งานได้ทันทีจากระยะยืนโพสท่า 1.5–2 เมตรหน้ากล้อง",
+    "keyCharacteristics": [
+      "Warm Gallery Paper Ground: พื้นหลังสีครีมงาช้างและเบจลินินที่ให้ความรู้สึกอบอุ่น สว่าง และขับสีผิวในภาพถ่ายให้ดูสุขภาพดี",
+      "2-Meter Kiosk Ergonomics: ขนาดตัวอักษร ปุ่มกด และตัวเลขนับถอยหลังออกแบบมาสำหรับระยะยืนหน้าเลนส์กล้อง ไม่ใช่ระยะนั่งพิมพ์งานหน้าจอ",
+      "Photo-First Spatial Budget: ภาพตัวอย่างสด (Live Preview) และภาพเปรียบเทียบการปรับผิวเนียนครองพื้นที่หลักของหน้าจอเสมอ",
+      "Tonal Layering for MATLAB uifigure: สร้างมิติความลึกด้วยการซ้อนเฉดสีกระดาษ (Warm Ivory → Soft Linen → Sand Border)"
+    ],
+    "rules": [
+      {
+        "name": "The One Primary CTA Rule",
+        "body": "ในแต่ละหน้าจอจะมีปุ่มที่ใช้สีพื้น Burnt Terracotta (#c85a3b) ได้เพียงปุ่มเดียวเท่านั้น คือปุ่มที่พาผู้ใช้เดินหน้าไปยังขั้นตอนถัดไป ปุ่มอื่นๆ ทั้งหมดบนหน้าเดียวกันต้องใช้สี Soft Linen (#ede6db) เพื่อให้ผู้มางานตัดสินใจกดได้ในเสี้ยววินาที",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Skin-Check Rule",
+        "body": "ห้ามวางพื้นหลังสีจัดจ้านติดกับกรอบภาพ ReviewMainImg ในหน้าปรับผิวเนียน พื้นที่รอบภาพตัวอย่างต้องเป็นสี Warm Ivory (#f7f3ec) เท่านั้น เพื่อป้องกันปรากฏการณ์ Simultaneous Contrast ที่ทำให้สายตามองสีผิวเพี้ยนขณะปรับสไลด์ Smoothness",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Meter Legibility Rule",
+        "body": "ข้อความใดที่ผู้ใช้ต้องอ่านขณะถอยไปยืนโพสท่าหน้ากล้อง (สถานะลำดับรูปที่ถ่าย และตัวเลขนับถอยหลัง) ห้ามมีขนาดเล็กกว่า 26px และตัวเลขนับถอยหลังต้องอยู่ที่ 96px เสมอ",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal Contrast Rule",
+        "body": "เมื่อวางปุ่มรองหรือพาเนลย่อยลงบนพื้นหลัง Warm Ivory (#f7f3ec) ต้องใช้สีพื้น Soft Linen (#ede6db) คู่กับตัวอักษร Espresso Ink (#231f1d) เสมอ ห้ามใช้ปุ่มสีขาวล้วนบนพื้นครีมอ่อนเพราะขอบปุ่มจะกลืนหายไปภายใต้แสงไฟในฮอลล์นิทรรศการ",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do ใช้พื้นหลังสี Warm Ivory ([0.97 0.95 0.93]) และการ์ดสี Soft Linen ([0.93 0.90 0.86]) ในทุกหน้าจอเพื่อให้ภาพถ่ายดูสว่างและสีผิวไม่เพี้ยน",
+      "Do ใช้สี Sand Border (uint8 ประมาณ [220, 210, 195]) สำหรับ Placeholder ของช่องรูปย่อที่ยังไม่ได้ถ่าย แทนการใช้สีเทาดำมืด (zeros + 35) แบบเดิม",
+      "Do รักษาขนาดปุ่มหลักให้ใหญ่ (สูง ≥ 55px) และใช้ฟอนต์ขนาดใหญ่ (20px–26px bold) เพื่อให้ใช้งานในบูธนิทรรศการได้รวดเร็ว",
+      "Do ใช้สี Studio Sage ([0.36 0.48 0.38]) กับข้อความแจ้งพาธที่บันทึกสำเร็จ เพื่อให้อ่านง่ายบนพื้นหลังสีครีมสว่าง"
+    ],
+    "donts": [
+      "Don't ใช้ตัวอักษรสีครีมอ่อนหรือสีขาวบนพื้นหลัง Warm Ivory หรือ Soft Linen เด็ดขาด ต้องใช้สี Espresso Ink ([0.14 0.12 0.11]) หรือ Roasted Taupe ([0.43 0.40 0.37]) เท่านั้น",
+      "Don't ใส่ปุ่มสี Burnt Terracotta มากกว่า 1 ปุ่มหลักต่อหน้าจอ (ยกเว้นปุ่มย่อยในแบนเนอร์แจ้งเตือนฉุกเฉิน)",
+      "Don't ลดขนาดหน้าจอแสดงภาพ ReviewMainImg หรือ ShootLiveImg เพื่อเพิ่มของตกแต่ง เพราะภาพจากกล้องและผลลัพธ์การประมวลผลผิวคือหัวใจของบูธ"
+    ]
+  }
+}

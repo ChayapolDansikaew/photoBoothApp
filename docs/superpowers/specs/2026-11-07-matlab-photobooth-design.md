@@ -66,9 +66,10 @@ Mineaorz/
 ├── +imgproc/
 │   ├── autoCorrect.m
 │   ├── skinMask.m            # คืนมาสก์ผิวแบบขอบนุ่ม [0,1]
-│   ├── prepareSmoothing.m    # มาสก์ + เลเยอร์ bilateral (ช้า ทำครั้งเดียวต่อรูป)
+│   ├── prepareSmoothing.m    # มาสก์ + เลเยอร์ผิวเนียน (skinSmooth บนช่อง Y, ทำครั้งเดียวต่อรูป)
 │   ├── blendSmoothing.m      # ผสมตามค่าสไลด์ (เร็ว)
-│   ├── skinSmooth.m          # prepare + blend รวดเดียว
+│   ├── skinSmooth.m          # bilateral เฉพาะช่อง Y ของ YIQ (จาก Group4_Final)
+│   ├── flashSkinSmooth.m     # ผิวเนียนจากภาพไม่แฟลช + รายละเอียดจากภาพแฟลช (ยังไม่ใช้ในตู้)
 │   ├── applyTone.m           # applyTone(img, name, 'preview'|'final')
 │   ├── toneNames.m
 │   ├── restoreClass.m
@@ -144,7 +145,7 @@ Mineaorz/
 1. ย่อเหลือ `workingLongSide`
 2. mirror
 3. `autoCorrect` (ถ้าเปิดสวิตช์ไว้)
-4. `skinSmooth`
+4. ผิวเนียน (`prepareSmoothing` + `blendSmoothing`)
 5. `applyTone(...,'final')`
 6. ส่งต่อให้ `composeStrip`
 
@@ -160,14 +161,16 @@ Mineaorz/
 3. ตัดขอบออก: ใช้ `imgradient` กับช่อง Y ที่ normalize แล้ว พิกเซลที่ gradient มากกว่าค่า percentile ที่ 85 ถือเป็นขอบ ขยายด้วย `imdilate(disk 1)` แล้วเอาออกจากมาสก์
 4. เบลอมาสก์ด้วย `imgaussfilt`, σ = 0.004 × ด้านยาวของรูป
 
-### 4.3 `skinSmooth(img, amount)` (amount 0–100)
+### 4.3 ผิวเนียน: `prepareSmoothing` + `blendSmoothing(prep, amount)` (amount 0–100)
 - a = amount/100 ถ้า a = 0 คืนรูปเดิมทันที
 - แยกเป็น 2 ขั้นเพื่อให้ลากสไลด์แล้วเห็นผลทันที:
-  - **`prepareSmoothing`** ทำครั้งเดียวต่อรูป: หามาสก์ M แล้วทำเลเยอร์ smooth ด้วย `imbilatfilt(img, 0.022, sigmaS)` บนรูปย่อที่ด้านยาวไม่เกิน 800px (sigmaS = 8 px ต่อ 1000 px) ถ้าย่อมาก็ขยายกลับ
+  - **`prepareSmoothing`** ทำครั้งเดียวต่อรูป: หามาสก์ M แล้วแปลงรูปเป็น YIQ ทำช่อง Y ให้เนียนด้วย `skinSmooth(Y, 0.01, sigmaS)` บนรูปย่อที่ด้านยาวไม่เกิน 800px (sigmaS = 3 px ที่ 800 px) ถ้าย่อมาก็ขยายกลับ แล้วประกอบกับช่อง I/Q เดิมของรูป สีผิวจึงไม่เปลี่ยน
   - **`blendSmoothing`** ทำทุกครั้งที่ขยับสไลด์: แค่ผสมรูปตามสูตรด้านล่าง
 - ความแรงของ bilateral คงที่ สไลด์คุมแค่น้ำหนัก a
-- คืนรายละเอียดผิว: `detail = img − imgaussfilt(img, 1)` แล้วใช้ `smooth = smooth + 0.3·detail`
+- คืนรายละเอียดผิว (เฉพาะช่อง Y): `detail = Y − imgaussfilt(Y, 1)` แล้วใช้ `Ysmooth = Ysmooth + 0.3·detail`
 - ผสมรูป: `out = img·(1 − a·M) + smooth·(a·M)`
+- `skinSmooth(img, sigmaR, sigmaS)` (จาก Group4_Final): `imbilatfilt` เฉพาะช่อง Y ของ YIQ ค่าเริ่มต้น sigmaR 0.01, sigmaS 3 คืนค่า double [0,1]
+- `flashSkinSmooth(noFlashImg, flashImg, sigmaR, sigmaS)`: base = bilateral ของ Y จากภาพไม่แฟลช, detail = Y_flash ./ bilateral(Y_flash), ผลลัพธ์ = base·detail โดยใช้สี (I/Q) ของภาพไม่แฟลช ถ้าภาพแฟลชขนาดไม่เท่ากันจะ resize ให้ ยังไม่ได้ใช้ในตู้ เพราะตู้ถ่ายช่องละ 1 รูปและไม่มีแฟลช
 - `debugSkinPipeline` แสดง 6 ช่อง: ต้นฉบับ → มาสก์ YCbCr → หลังทำ morphology → edge map → มาสก์สุดท้าย → ผลลัพธ์
 
 ### 4.4 `applyTone(img, name, mode)`
@@ -229,7 +232,9 @@ Mineaorz/
 ใช้ `matlab.unittest` รันด้วย `runtests('tests')`
 
 - **`imgproc`:**
-  - `skinSmooth(img, 0)` ต้องได้รูปเดิมเป๊ะ
+  - `blendSmoothing(prepareSmoothing(img), 0)` ต้องได้รูปเดิมเป๊ะ
+  - ผิวเนียนต้องไม่เปลี่ยนสี: ช่อง I/Q ของ YIQ เท่าเดิม ทั้งรูปเล็กและรูปที่ใหญ่กว่า 800px
+  - `flashSkinSmooth`: ใส่ภาพเดียวกันสองช่องต้องได้ภาพเดิม, ได้ความสว่างและสีจากภาพไม่แฟลชโดย noise ลดลง และได้ texture จากภาพแฟลช
   - บริเวณผิวสังเคราะห์ที่มี noise ค่า variance ต้องลดลงอย่างน้อย 50% ที่ amount 100
   - ความชันของขอบ step edge ต้องเหลืออย่างน้อย 90%
   - ทุกโทนต้องคืนขนาดและ class เดิม และ `bw` ต้องได้ R=G=B

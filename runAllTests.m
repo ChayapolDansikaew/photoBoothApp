@@ -4,7 +4,7 @@ function results = runAllTests(target)
 % (Named runAllTests, not runTests, so it cannot shadow the built-in
 % runtests on case-insensitive Windows file systems.)
 root = fileparts(mfilename('fullpath'));
-addpath(root, fullfile(root, 'tests', 'helpers'));
+addpath(root, fullfile(root, 'tools'), fullfile(root, 'tests', 'helpers'));
 if nargin < 1 || isempty(target)
     suite = fullfile(root, 'tests');
 else
